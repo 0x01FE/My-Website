@@ -1,0 +1,97 @@
+/* Global Settings */
+
+body {
+    font-family: 'Courier New', Courier, monospace;
+}
+
+a {
+    color: black;
+    text-decoration: none;
+}
+
+a:hover {
+    color: hotpink;
+}
+
+
+
+
+/* Other */
+
+.header {
+    text-align: center;
+
+    margin: 10pt;
+
+    border-style: solid;
+    border-color: #1E2022;
+    background-color: #F0F5F9;
+    border-radius: 5pt;
+}
+
+.container {
+
+    display: flex;
+    flex-direction: row;
+
+    border-style: solid;
+    border-color: #1E2022;
+    background-color: #F0F5F9;
+}
+
+.sidebar {
+    order: 1;
+    float: left;
+
+    padding: 20pt;
+    padding-bottom: 25%;
+
+    margin: 15pt;
+
+    border-style: solid;
+    border-radius: 10px;
+    border-color: #1E2022;
+    background-color: #C9D6DF;
+
+    opacity: 0.9;
+
+    /* Text Settings */
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 30pt;
+}
+
+
+.dlog {
+    order: 2;
+    flex: 3;
+    text-align: center;
+
+    display: flex;
+    flex-direction: column;
+
+    padding: 10pt;
+    margin: 15pt;
+    margin-left: 15%;
+    margin-right: 15%;
+
+    border-style: solid;
+    border-radius: 10px;
+    border-color: #1E2022;
+    background-color: #C9D6DF;
+}
+
+.post {
+    /* opacity: 0.9; */
+
+    border: 2px solid #52616B;
+    border-radius: 10px;
+
+    padding: 10pt;
+
+    margin: 10pt;
+    margin-left: 20pt;
+    margin-right: 20pt;
+
+    background-color: #C9D6DF;
+}
