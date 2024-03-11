@@ -1,7 +1,13 @@
 /* Global Settings */
+@font-face {
+    font-family: ibmplexmono;
+    src: url(./IBMPlexMono-Regular.woff) format('woff');
+}
+
 
 body {
-    font-family: 'Courier New', Courier, monospace;
+    /* font-family: 'Courier New', Courier, monospace; */
+    font-family: ibmplexmono;
 }
 
 a {
@@ -27,6 +33,10 @@ a:hover {
     border-color: #1E2022;
     background-color: #F0F5F9;
     border-radius: 5pt;
+}
+
+.header h1 {
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 .container {
@@ -57,7 +67,6 @@ a:hover {
 
     /* Text Settings */
     font-weight: bold;
-    font-family: Arial, Helvetica, sans-serif;
     line-height: 30pt;
 }
 
