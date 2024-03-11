@@ -100,12 +100,16 @@ a:hover {
     border-radius: 10px;
 
     padding: 10pt;
+    padding-left: 20pt;
+    padding-right: 20pt;
 
     margin: 10pt;
     margin-left: 20pt;
     margin-right: 20pt;
 
     background-color: #C9D6DF;
+
+    line-height: 1.25em;
 }
 
 .post p {

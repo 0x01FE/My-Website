@@ -1,5 +1,6 @@
 import glob
 import configparser
+import random
 
 import flask
 
@@ -7,12 +8,14 @@ from post import Post
 
 app = flask.Flask(__name__, static_url_path='', static_folder='static')
 
+CONFIG_PATH = "../config.ini"
 config = configparser.ConfigParser()
-config.read("config.ini")
+config.read(CONFIG_PATH)
 
 POSTS_FOLDER = config['POSTS']['POSTS_FOLDER']
+STATUS_FILE = config['STATUS']['STATUS_FILE']
 
-def get_posts() -> list[Post]:
+def get_posts(category_filter : str | None = None) -> list[Post]:
     post_files= glob.glob(f'{POSTS_FOLDER}/*')
     post_files.remove(f'{POSTS_FOLDER}\\POST_TEMPLATE.md')
 
@@ -20,7 +23,10 @@ def get_posts() -> list[Post]:
     for post_file in post_files:
         post = Post(post_file)
 
-        posts.append(post)
+        if not category_filter:
+            posts.append(post)
+        elif category_filter == post.category:
+            posts.append(post)
 
     # Order Posts by Date
     ordered_posts = []
@@ -36,6 +42,14 @@ def get_posts() -> list[Post]:
 
     return reversed(ordered_posts)
 
+def get_status() -> str:
+    with open(STATUS_FILE, 'r') as file:
+        statuses = file.readlines()
+
+    status = random.randint(0, len(statuses) - 1)
+
+    return statuses[status]
+
 @app.route('/')
 def index():
 
@@ -46,7 +60,10 @@ def index():
     for post in posts:
         post_bodies.append(post.body)
 
-    return flask.render_template('index.html', posts=post_bodies)
+    # Get status
+    status = get_status()
+
+    return flask.render_template('index.html', posts=post_bodies, status=status)
 
 
 if __name__ == "__main__":
