@@ -1,1 +1,3 @@
-*.woff
+__pycache__
+*.md
+!POST_TEMPLATE.md

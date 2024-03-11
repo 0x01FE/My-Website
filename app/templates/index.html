@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+    <header>
+        <link rel="shortcut icon" href="index_favicon.ico">
+        <link rel="stylesheet" href="index_style.css">
+        <title>0x01fe.net</title>
+    </header>
+    <body>
+        <div class="header">
+            <h1>0x01fe.net</h1>
+            <h4>Catchy Right‽</h4>
+        </div>
+        <div class="container">
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <a href="./">Home</a><br>
+                <a href="">Media</a><br>
+                <a href="">Programming</a><br>
+                <a href="">About</a>
+            </div>
+
+            <!-- Main Page -->
+            <!-- Get it? D-Log? Like digital log? -->
+            <div class="dlog">
+                {% for post in posts %}
+                    <div class="post">{{ post|safe }}</div>
+                {% endfor %}
+            </div>
+        </div>
+    </body>
+</html>
