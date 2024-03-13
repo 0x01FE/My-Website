@@ -3,6 +3,7 @@ import configparser
 import random
 
 import flask
+import markdown
 
 from post import Post
 
@@ -43,12 +44,12 @@ def get_posts(category_filter : str | None = None) -> list[Post]:
     return reversed(ordered_posts)
 
 def get_status() -> str:
-    with open(STATUS_FILE, 'r') as file:
+    with open(STATUS_FILE, 'r', encoding='utf-8') as file:
         statuses = file.readlines()
 
     status = random.randint(0, len(statuses) - 1)
 
-    return statuses[status]
+    return markdown.markdown(statuses[status])
 
 @app.route('/')
 def index():

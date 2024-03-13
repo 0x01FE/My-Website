@@ -12,7 +12,7 @@ class Post:
     def __init__(self, file_path):
         self.file = file_path
 
-        with open(file_path, 'r') as file:
+        with open(file_path, 'r', encoding='utf-8') as file:
             lines = file.readlines()
 
         self.category = lines[1].split(":")[1].strip()
