@@ -15,4 +15,4 @@ RUN python3 -m pip install -r requirements.txt
 
 WORKDIR ./app
 
-CMD ["python3", "-u", "./app.py"]
+CMD ["python3", "-u", "app.py"]
