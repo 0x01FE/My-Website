@@ -10,7 +10,7 @@ from post import Post
 
 app = flask.Flask(__name__, static_url_path='', static_folder='static')
 
-CONFIG_PATH = "../config.ini"
+CONFIG_PATH = "./config.ini"
 config = configparser.ConfigParser()
 config.read(CONFIG_PATH)
 
