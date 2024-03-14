@@ -3,6 +3,7 @@ import configparser
 import random
 
 import flask
+import waitress
 import markdown
 
 from post import Post
@@ -15,10 +16,12 @@ config.read(CONFIG_PATH)
 
 POSTS_FOLDER = config['POSTS']['POSTS_FOLDER']
 STATUS_FILE = config['STATUS']['STATUS_FILE']
+PORT = int(config['NETWORK']['PORT'])
+DEV = int(config['NETWORK']['DEV'])
 
 def get_posts(category_filter : str | None = None) -> list[Post]:
-    post_files= glob.glob(f'{POSTS_FOLDER}/*')
-    post_files.remove(f'{POSTS_FOLDER}\\POST_TEMPLATE.md')
+    post_files = glob.glob(f'{POSTS_FOLDER}/*')
+    post_files.remove(f'{POSTS_FOLDER}/POST_TEMPLATE.md')
 
     posts: list[Post] = []
     for post_file in post_files:
@@ -68,4 +71,7 @@ def index():
 
 
 if __name__ == "__main__":
-    app.run()
+    if DEV:
+        app.run(port=PORT)
+    else:
+        waitress.serve(app, host='0.0.0.0', port=PORT)

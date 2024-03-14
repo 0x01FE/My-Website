@@ -2,3 +2,6 @@ __pycache__
 *.md
 !POST_TEMPLATE.md
 !README.md
+
+docker-compose.yaml
+*.sh
