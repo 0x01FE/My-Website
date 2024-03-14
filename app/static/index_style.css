@@ -31,7 +31,7 @@ a:hover {
     border-style: solid;
     border-color: #1E2022;
     background-color: #F0F5F9;
-    border-radius: 5pt;
+    border-radius: 20px;
 }
 
 .header h1 {
@@ -51,14 +51,16 @@ a:hover {
     border-style: solid;
     border-color: #1E2022;
     background-color: #F0F5F9;
+    border-radius: 20px;
 }
 
 .sidebar {
     order: 1;
+    height: fit-content;
     float: left;
 
     padding: 20pt;
-    padding-bottom: 25%;
+    padding-bottom: 5em;
 
     margin: 15pt;
 
@@ -93,7 +95,7 @@ a:hover {
     margin-right: 15%;
 
     border-style: solid;
-    border-radius: 10px;
+    border-radius: 20px;
     border-color: #1E2022;
     background-color: #C9D6DF;
 }
