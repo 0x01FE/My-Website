@@ -1,21 +1,45 @@
-/* Global Settings */
-@font-face {
-    font-family: ibmplexmono;
-    src: url(./IBMPlexMono-Regular.woff) format('woff');
+/* Global Stuff */
+@import url('https://fonts.googleapis.com/css?family=PT%20Mono:700|PT%20Mono:400');
+
+body {
+  font-family: 'PT Mono';
+  font-weight: 400;
+}
+
+h1, h2, h3, h4, h5 {
+  font-family: 'PT Mono';
+  font-weight: 700;
+}
+
+html {
+    --text: hsl(224, 83%, 91%);
+    --background: hsl(224, 31%, 23%);
+    --primary: hsl(229, 81%, 73%);
+    --primary10: hsla(209, 61%, 71%, 10%);
+    --primary20: hsla(209, 61%, 71%, 20%);
+    --primary40: hsla(209, 61%, 71%, 40%);
+    --secondary: hsl(277, 81%, 33%);
+    --accent: hsl(291, 81%, 60%);
+    --accent75: hsla(291, 81%, 60%, 75%);
+    --accent50: hsla(291, 81%, 60%, 50%);
+
+    --main-background: var(--primary10);
+    --borders-style: hidden;
+    --border-radius: 15px;
 }
 
 
 body {
-    /* font-family: 'Courier New', Courier, monospace; */
-    font-family: ibmplexmono;
+    color: var(--text);
+    background-color: var(--background);
 }
 
 a {
-    color: black;
+    color: var(--text);
 }
 
 a:hover {
-    color: hotpink;
+    color: var(--accent);
 }
 
 
@@ -26,21 +50,18 @@ a:hover {
 .header {
     text-align: center;
 
-    margin: 10pt;
+    margin: 0 30%;
+    padding: 2em;
 
-    border-style: solid;
+    border-style: var(--borders-style);
     border-color: #1E2022;
-    background-color: #F0F5F9;
-    border-radius: 20px;
-}
-
-.header h1 {
-    font-family: Arial, Helvetica, sans-serif;
+    background-color: var(--background);
+    border-radius: var(--border-radius);
 }
 
 .header a {
     text-decoration: none;
-    color: #703be7;
+    color: var(--primary);
 }
 
 .container {
@@ -48,10 +69,12 @@ a:hover {
     display: flex;
     flex-direction: row;
 
-    border-style: solid;
+    margin: 0px 20%;
+
+    border-style: var(--borders-style);
     border-color: #1E2022;
-    background-color: #F0F5F9;
-    border-radius: 20px;
+    background-color: var(--main-background);
+    border-radius: var(--border-radius);
 }
 
 .sidebar {
@@ -60,14 +83,14 @@ a:hover {
     float: left;
 
     padding: 20pt;
-    padding-bottom: 5em;
 
-    margin: 15pt;
+    margin: 5em 0;
+    margin-left: 2em;
 
-    border-style: solid;
-    border-radius: 10px;
+    border-style: var(--borders-style);
+    border-radius: var(--border-radius);
     border-color: #1E2022;
-    background-color: #C9D6DF;
+    background-color: var(--main-background);
 
     opacity: 0.9;
 
@@ -90,35 +113,40 @@ a:hover {
     flex-direction: column;
 
     padding: 10pt;
-    margin: 15pt;
-    margin-left: 15%;
-    margin-right: 15%;
+    margin: 0 5%;
+    margin-left: 0;
 
-    border-style: solid;
-    border-radius: 20px;
+    border-style: var(--borders-style);
+    border-radius: var(--border-radius);
     border-color: #1E2022;
-    background-color: #C9D6DF;
+    /* background-color: var(--main-background); */
 }
 
 .post {
-    /* opacity: 0.9; */
 
-    border: 2px solid #52616B;
-    border-radius: 10px;
+    border-style: var(--borders-style);
+    border-radius: var(--border-radius);
 
-    padding: 10pt;
-    padding-left: 20pt;
-    padding-right: 20pt;
+    padding: 1.5em 2em;
+    margin: 1em 2em;
 
-    margin: 10pt;
-    margin-left: 20pt;
-    margin-right: 20pt;
+    /* background-color: var(--main-background); */
+}
 
-    background-color: #C9D6DF;
+.post h2 {
+    text-decoration: underline;
+    text-decoration-style: solid;
+    text-decoration-thickness: 0.25em;
+    text-underline-offset: 6px;
+    text-decoration-color: var(--accent75);
+}
 
-    line-height: 1.25em;
+.post h3 {
+    font-weight: 300;
+    font-size: 18px;
 }
 
 .post p {
+    line-height: 2.25;
     text-indent: 3em;
 }

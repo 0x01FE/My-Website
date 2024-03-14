@@ -21,7 +21,12 @@ DEV = int(config['NETWORK']['DEV'])
 
 def get_posts(category_filter : str | None = None) -> list[Post]:
     post_files = glob.glob(f'{POSTS_FOLDER}/*')
-    post_files.remove(f'{POSTS_FOLDER}/POST_TEMPLATE.md')
+    try:
+        post_files.remove(f'{POSTS_FOLDER}/POST_TEMPLATE.md')
+    except ValueError as e:
+        print(e)
+        print(f'Couldn\'t remove the template file probably; {post_files}')
+        exit()
 
     posts: list[Post] = []
     for post_file in post_files:
