@@ -59,6 +59,7 @@ def get_status() -> str:
 
     return markdown.markdown(statuses[status])
 
+# Main Page
 @app.route('/')
 def index():
 
@@ -74,6 +75,78 @@ def index():
 
     return flask.render_template('index.html', posts=post_bodies, status=status)
 
+# Games Page
+@app.route('/games/')
+def games():
+
+    # Get posts
+    posts = get_posts(category_filter="games")
+
+    post_bodies = []
+    for post in posts:
+        post_bodies.append(post.body)
+
+    # Get status
+    status = get_status()
+
+    return flask.render_template('games.html', posts=post_bodies, status=status)
+
+# Music Page
+@app.route('/music/')
+def music():
+
+    # Get posts
+    posts = get_posts(category_filter="music")
+
+    post_bodies = []
+    for post in posts:
+        post_bodies.append(post.body)
+
+    # Get status
+    status = get_status()
+
+    return flask.render_template('music.html', posts=post_bodies, status=status)
+
+# Motion Pictures Page
+@app.route('/motion-pictures/')
+def motion_pictures():
+
+    # Get posts
+    posts = get_posts(category_filter="motion-pictures")
+
+    post_bodies = []
+    for post in posts:
+        post_bodies.append(post.body)
+
+    # Get status
+    status = get_status()
+
+    return flask.render_template('motion-pictures.html', posts=post_bodies, status=status)
+
+# Programming Page
+@app.route('/programming/')
+def programming():
+
+    # Get posts
+    posts = get_posts(category_filter="programming")
+
+    post_bodies = []
+    for post in posts:
+        post_bodies.append(post.body)
+
+    # Get status
+    status = get_status()
+
+    return flask.render_template('programming.html', posts=post_bodies, status=status)
+
+# About Page
+@app.route('/about/')
+def about():
+
+    # Get status
+    status = get_status()
+
+    return flask.render_template('about.html', status=status)
 
 if __name__ == "__main__":
     if DEV:
