@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+    <header>
+        <link rel="shortcut icon" href="index_favicon.ico">
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        <title>0x01fe.net - About</title>
+    </header>
+    <body>
+        <div class="header">
+            <h1>0x01fe.net</h1>
+            {{ status|safe }}
+        </div>
+        <div class="container">
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <a href="..">Home</a><br>
+                <a href="../games/">Games</a><br>
+                <a href="../music/">Music</a><br>
+                <a href="../motion-pictures/">Motion Picture</a><br>
+                <a href="../programming/">Programming</a><br>
+                <a href="."><u>About</u></a>
+            </div>
+
+            <!-- Main Page -->
+            <!-- Get it? D-Log? Like digital log? -->
+            <div class="dlog">
+                <div class="post">
+                    <h2>About</h2>
+                    <p>
+                        Hi! I'm 0x01fe. This website is a personal project that allows me to express my thoughts online about things I like and also gives me something to program and tinker with on my spare time. If you want to contact me try hitting me up on discord at <u>0x01fe</u>.
+                    </p>
+                    <br>
+                    <h2>Why 0x01fe?</h2>
+                    <p>
+                        This is a pretty common question I get regarding my username so I thought I'd put a little section here about it. The thought process behind the username was "I like computers so what's a computer related username I could have?" and the first thing that came to mind was the master boot record boot sector (100% related to that other <a href="https://masterbootrecord.bandcamp.com/"><i>Master Boot Record</i></a>). So I opened up the <a href="https://en.wikipedia.org/wiki/Master_boot_record">Wikipedia Page</a> on the master boot record and scrolled until something called out to me. When I saw the starting byte of the boot signature in hex was <b>0x01fe</b> I thought "yeah that'd work", and I've stuck with it.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

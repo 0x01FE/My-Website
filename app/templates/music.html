@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+    <header>
+        <link rel="shortcut icon" href="index_favicon.ico">
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        <title>0x01fe.net - Music</title>
+    </header>
+    <body>
+        <div class="header">
+            <h1>Music</h1>
+            {{ status|safe }}
+        </div>
+        <div class="container">
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <a href="..">Home</a><br>
+                <a href="../games/">Games</a><br>
+                <a href="."><u>Music</u></a><br>
+                <a href="../motion-pictures/">Motion Picture</a><br>
+                <a href="../programming/">Programming</a><br>
+                <a href="../about/">About</a>
+            </div>
+
+            <!-- Main Page -->
+            <!-- Get it? D-Log? Like digital log? -->
+            <div class="dlog">
+                {% for post in posts %}
+                    <div class="post">{{ post|safe }}</div>
+                {% endfor %}
+            </div>
+        </div>
+    </body>
+</html>
