@@ -19,6 +19,7 @@ html {
     --primary20: hsla(209, 61%, 71%, 20%);
     --primary40: hsla(209, 61%, 71%, 40%);
     --secondary: hsl(277, 81%, 33%);
+    --secondary50: hsla(277, 81%, 33%, 50%);
     --accent: hsl(291, 81%, 60%);
     --accent75: hsla(291, 81%, 60%, 75%);
     --accent50: hsla(291, 81%, 60%, 50%);
@@ -95,6 +96,8 @@ a:hover {
 
     opacity: 0.9;
 
+    box-shadow: -10px 10px var(--accent);
+
     /* Text Settings */
     font-weight: bold;
     line-height: 30pt;
@@ -117,7 +120,6 @@ a:hover {
     border-style: var(--borders-style);
     border-radius: var(--border-radius);
     border-color: #1E2022;
-    /* background-color: var(--main-background); */
 }
 
 .post {
@@ -128,15 +130,35 @@ a:hover {
     padding: 1.5em 2em;
     margin: 1em 2em;
 
-    /* background-color: var(--main-background); */
+    background-color: var(--main-background);
+    box-shadow: 10px 10px var(--accent);
+}
+
+.post img {
+    border-style: var(--borders-style);
+    border-radius: var(--border-radius);
+
+    width: 90%;
+
+    padding: 0.5em;
+    margin: 0.5em 1em;
+
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+
+    background-color: var(--background);
 }
 
 .post h2 {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-weight: 100;
+
     text-decoration: underline;
     text-decoration-style: solid;
     text-decoration-thickness: 0.25em;
     text-underline-offset: 6px;
-    text-decoration-color: var(--accent75);
+    text-decoration-color: var(--primary);
 }
 
 .post h3 {
