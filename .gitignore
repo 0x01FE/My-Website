@@ -9,3 +9,4 @@ docker-compose.yaml
 # Ignore images in posts
 *.jpg
 *.png
+*.gif
