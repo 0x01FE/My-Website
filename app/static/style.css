@@ -70,7 +70,7 @@ a:hover {
     display: flex;
     flex-direction: row;
 
-    margin: 0px 10%;
+    margin: 0px 5%;
 
     border-style: var(--borders-style);
     border-color: #1E2022;
@@ -96,7 +96,7 @@ a:hover {
 
     opacity: 0.9;
 
-    box-shadow: -10px 10px var(--accent);
+    /* box-shadow: -10px 10px var(--accent); */
 
     /* Text Settings */
     font-weight: bold;
@@ -131,7 +131,7 @@ a:hover {
     margin: 1em 2em;
 
     background-color: var(--main-background);
-    box-shadow: 10px 10px var(--accent);
+    /* box-shadow: 10px 10px var(--accent); */
 }
 
 .post img {
@@ -150,9 +150,10 @@ a:hover {
     background-color: var(--background);
 }
 
-.post h2 {
+.post h1 {
     font-family: Georgia, 'Times New Roman', Times, serif;
     font-weight: 100;
+    font-size: 26px;
 
     text-decoration: underline;
     text-decoration-style: solid;
@@ -161,7 +162,8 @@ a:hover {
     text-decoration-color: var(--primary);
 }
 
-.post h3 {
+.post h2 {
+    font-family: Georgia, 'Times New Roman', Times, serif;
     font-weight: 300;
     font-size: 18px;
 }
