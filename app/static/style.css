@@ -172,3 +172,26 @@ a:hover {
     line-height: 2.25;
     text-indent: 3em;
 }
+
+.comment-container {
+    background-color: var(--primary40);
+    border-style: var(--borders-style);
+    border-radius: var(--border-radius);
+
+    padding: 1em;
+    margin: 1em;
+}
+
+.comment-editor input {
+    width: 100%;
+    padding: 3em 0;
+    line-height: 140%;
+
+    border-style: solid;
+    /* border-color: var(--secondary50); */
+    border-radius: var(--border-radius);
+}
+
+.comment-editor input:focus {
+    border: 3px solid var(--accent);
+}

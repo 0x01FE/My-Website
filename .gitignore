@@ -5,6 +5,7 @@ __pycache__
 
 docker-compose.yaml
 *.sh
+*.ini
 
 # Ignore images in posts
 *.jpg

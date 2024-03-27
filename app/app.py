@@ -3,12 +3,18 @@ import configparser
 import random
 
 import flask
+import flask_wtf.csrf
+import flask_session
 import waitress
 import markdown
 
 from post import Post
+import comment
 
 app = flask.Flask(__name__, static_url_path='', static_folder='static')
+
+csrf = flask_wtf.csrf.CSRFProtect()
+csrf.init_app(app)
 
 CONFIG_PATH = "./config.ini"
 config = configparser.ConfigParser()
@@ -66,14 +72,20 @@ def index():
     # Get posts
     posts = get_posts()
 
-    post_bodies = []
+    # Get Comments
+    comments = []
+
+    posts_and_comments = []
     for post in posts:
-        post_bodies.append(post.body)
+        posts_and_comments.append((post.body, comments))
 
     # Get status
     status = get_status()
 
-    return flask.render_template('index.html', posts=post_bodies, status=status)
+    # Setup Comment Form
+    form = comment.CommentForm()
+
+    return flask.render_template('index.html', posts=posts_and_comments, status=status, form=form)
 
 # Games Page
 @app.route('/games/')
