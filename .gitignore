@@ -10,3 +10,7 @@ docker-compose.yaml
 *.jpg
 *.png
 *.gif
+
+# Writing
+writing
+
