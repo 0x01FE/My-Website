@@ -1,0 +1,31 @@
+.albums {
+    height: 100%;
+    height: fit-content;
+    align-self: flex-start;
+
+    border-style: var(--borders-style);
+    border-radius: var(--border-radius);
+    border-color: #1E2022;
+    background-color: var(--main-background);
+
+    /* Text Settings
+    font-weight: bold;
+    line-height: 30pt; */
+    line-height: 0;
+    font-size: 0;
+}
+
+.albums img {
+    height: 100px;
+    width: 100px;
+    padding: 0 0;
+    margin: 0 0;
+    border: 0 0;
+}
+
+
+.body {
+    height: 100%;
+    padding: 0 0;
+    margin: 0 0;
+}

@@ -172,3 +172,41 @@ a:hover {
     line-height: 2.25;
     text-indent: 3em;
 }
+
+/* MUSIC */
+.albums {
+    height: fit-content;
+    align-self: flex-start;
+    top: 10px;
+
+    padding: 20pt;
+
+    margin: 5em 0;
+    margin-right: 2em;
+
+    border-style: var(--borders-style);
+    border-radius: var(--border-radius);
+    border-color: #1E2022;
+    background-color: var(--main-background);
+
+    /* Text Settings
+    font-weight: bold;
+    line-height: 30pt; */
+    line-height: 0;
+    font-size: 0;
+}
+
+.albums img {
+    height: 100px;
+    width: 100px;
+    padding: 0 0;
+    margin: 0 0;
+    border: 0 0;
+}
+
+.albums h1 {
+    font-size: normal;
+    text-align: center;
+    padding: 0.5em 0;
+}
+

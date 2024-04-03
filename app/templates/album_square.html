@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+    <header>
+        <link rel="shortcut icon" href="index_favicon.ico">
+        <link rel="stylesheet" href="{{ url_for('static', filename='albumsquare.css') }}">
+        <title>Album Square</title>
+    </header>
+    <body>
+        <div class="albums">
+            {% for album in top_albums %}
+                    <a title="{{ album.album_name}} by {{ album.artist_name }} - {{ album.listen_time }} Hours">
+                        <img src="{{ album.album_cover }}" style="width: {{ res }}%; height: {{ res }}%;">
+                    </a>
+                    {% if loop.index % limit == 0 %}
+                        <br>
+                    {% endif %}
+                {% endfor %}
+        </div>
+    </body>
+</html>

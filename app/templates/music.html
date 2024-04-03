@@ -28,6 +28,18 @@
                     <div class="post">{{ post|safe }}</div>
                 {% endfor %}
             </div>
+
+            <div class="albums">
+                <h1>Top Albums</h1>
+                {% for album in top_albums %}
+                    <a title="{{ album.album_name}} by {{ album.artist_name }} - {{ album.listen_time }} Hours">
+                        <img src="{{ album.album_cover }}">
+                    </a>
+                    {% if loop.index % 3 == 0 %}
+                        <br>
+                    {% endif %}
+                {% endfor %}
+            </div>
         </div>
     </body>
 </html>
