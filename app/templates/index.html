@@ -34,8 +34,7 @@
                             {% if user %}
                             <div class="comment-editor">
                                 <h3>{{ user }}</h3>
-                                <form method="post" action="/comment">
-                                    <!-- <input type="text" class="commenter"> -->
+                                <form method="post" action="/comment/">
                                     {{ form.textbox }}
                                     <input type="submit" value="Save">
                                 </form>

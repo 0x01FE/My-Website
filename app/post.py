@@ -8,6 +8,7 @@ class Post:
     date : datetime.datetime
     body : str
     file : str
+    id : int
 
     def __init__(self, file_path):
         self.file = file_path
@@ -21,5 +22,7 @@ class Post:
         date = lines[3].split(":")[1].strip()
         self.date = datetime.datetime.strptime(date, "%d-%m-%Y")
 
-        self.body = markdown.markdown(''.join(lines[6:]))
+        self.id = int(lines[4].split(":")[1].strip())
+
+        self.body = markdown.markdown(''.join(lines[7:]))
 

@@ -1,6 +1,7 @@
 import glob
 import configparser
 import random
+import base64
 
 import flask
 import flask_wtf.csrf
@@ -10,12 +11,13 @@ import markdown
 
 from post import Post
 import comment
+import user
 
 app = flask.Flask(__name__, static_url_path='', static_folder='static')
+app.register_blueprint(comment.comments)
+app.register_blueprint(user.user)
 
-csrf = flask_wtf.csrf.CSRFProtect()
-csrf.init_app(app)
-
+# CONFIG
 CONFIG_PATH = "./config.ini"
 config = configparser.ConfigParser()
 config.read(CONFIG_PATH)
@@ -24,6 +26,17 @@ POSTS_FOLDER = config['POSTS']['POSTS_FOLDER']
 STATUS_FILE = config['STATUS']['STATUS_FILE']
 PORT = int(config['NETWORK']['PORT'])
 DEV = int(config['NETWORK']['DEV'])
+
+
+# CSRF Protect
+app.config['SECRET_KEY'] = base64.b64decode(config["FLASK"]["SECRET"])
+csrf = flask_wtf.csrf.CSRFProtect()
+csrf.init_app(app)
+
+# Session Setup
+app.config['SESSION_TYPE'] = 'filesystem'
+app.config['SESSION_FILE_DIR'] = './data/.flask_session/'
+flask_session.Session(app)
 
 def get_posts(category_filter : str | None = None) -> list[Post]:
     post_files = glob.glob(f'{POSTS_FOLDER}/*')
@@ -85,7 +98,7 @@ def index():
     # Setup Comment Form
     form = comment.CommentForm()
 
-    return flask.render_template('index.html', posts=posts_and_comments, status=status, form=form)
+    return flask.render_template('index.html', posts=posts_and_comments, status=status, form=form, user="yes")
 
 # Games Page
 @app.route('/games/')
