@@ -177,7 +177,7 @@ def album_square(user_id, rows : int):
 
     limit = rows ** 2
 
-    res = 100/(rows+2)
+    res = (1080/(rows))-rows
 
     # Get top albums
     r = requests.get(

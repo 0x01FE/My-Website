@@ -9,7 +9,7 @@
         <div class="albums">
             {% for album in top_albums %}
                     <a title="{{ album.album_name}} by {{ album.artist_name }} - {{ album.listen_time }} Hours">
-                        <img src="{{ album.album_cover }}" style="width: {{ res }}%; height: {{ res }}%;">
+                        <img src="{{ album.album_cover }}" style="width: {{ res }}px; height: {{ res }}px;">
                     </a>
                     {% if loop.index % limit == 0 %}
                         <br>
