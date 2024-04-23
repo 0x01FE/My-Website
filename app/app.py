@@ -1,6 +1,8 @@
+import os
 import glob
 import configparser
 import random
+import datetime
 
 import requests
 import flask
@@ -15,6 +17,7 @@ CONFIG_PATH = "./config.ini"
 config = configparser.ConfigParser()
 config.read(CONFIG_PATH)
 
+WRITING_FOLDER = 'static/writing/'
 POSTS_FOLDER = config['POSTS']['POSTS_FOLDER']
 STATUS_FILE = config['STATUS']['STATUS_FILE']
 PORT = int(config['NETWORK']['PORT'])
@@ -160,6 +163,31 @@ def programming():
     status = get_status()
 
     return flask.render_template('programming.html', posts=post_bodies, status=status)
+
+@app.route('/writing/')
+def writing():
+
+    works = []
+
+    # Get all works in writing folder
+    files = glob.glob(WRITING_FOLDER + '*')
+
+    for path in files:
+
+        date: str = datetime.datetime.fromtimestamp(os.path.getctime(path)).strftime("%B %d, %Y")
+        name: str = path.split('/')[-1]
+
+        works.append({
+            'date' : date,
+            'name' : name,
+            'path' : path
+        })
+
+    return flask.render_template('writing.html', works=works)
+
+
+
+
 
 # About Page
 @app.route('/about/')
