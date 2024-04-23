@@ -107,6 +107,39 @@ a:hover {
     text-decoration: none;
 }
 
+.rightbar {
+    height: fit-content;
+    align-self: flex-start;
+    top: 10px;
+
+    padding: 20pt;
+
+    margin: 5em 0;
+    margin-right: 2em;
+
+    border-style: var(--borders-style);
+    border-radius: var(--border-radius);
+    border-color: #1E2022;
+    background-color: var(--main-background);
+
+    opacity: 0.9;
+
+    /* box-shadow: -10px 10px var(--accent); */
+
+    /* Text Settings */
+    font-weight: bold;
+    line-height: 30pt;
+}
+
+.rightbar a {
+    text-decoration: none;
+}
+
+.rightbar h2 {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    line-height: normal;
+}
+
 .dlog {
     flex: 3;
 
