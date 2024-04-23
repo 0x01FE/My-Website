@@ -1,7 +1,10 @@
+import os
 import glob
 import configparser
 import random
+import datetime
 
+import requests
 import flask
 import waitress
 import markdown
@@ -14,10 +17,14 @@ CONFIG_PATH = "./config.ini"
 config = configparser.ConfigParser()
 config.read(CONFIG_PATH)
 
+WRITING_FOLDER = 'static/writing/'
 POSTS_FOLDER = config['POSTS']['POSTS_FOLDER']
 STATUS_FILE = config['STATUS']['STATUS_FILE']
 PORT = int(config['NETWORK']['PORT'])
 DEV = int(config['NETWORK']['DEV'])
+
+MUSIC_API_TOKEN = config['AUTH']['MUSIC_API_TOKEN']
+MUSIC_API_URL = config['NETWORK']['MUSIC_API_URL']
 
 def get_posts(category_filter : str | None = None) -> list[Post]:
     post_files = glob.glob(f'{POSTS_FOLDER}/*')
@@ -105,7 +112,25 @@ def music():
     # Get status
     status = get_status()
 
-    return flask.render_template('music.html', posts=post_bodies, status=status)
+    # Get top albums
+    r = requests.get(
+        MUSIC_API_URL +'/top/albums',
+        headers={
+            'token' : MUSIC_API_TOKEN,
+            'user' : '1',
+            'limit' : '9'
+        })
+
+    top_albums = r.json()['top']
+    for album_index in range(0, len(top_albums)):
+        album = top_albums[album_index]
+
+        time = int(album['listen_time'])
+        hours = round(time/1000/60/60, 1)
+
+        top_albums[album_index]['listen_time'] = hours
+
+    return flask.render_template('music.html', posts=post_bodies, status=status, top_albums=top_albums)
 
 # Motion Pictures Page
 @app.route('/motion-pictures/')
@@ -139,6 +164,31 @@ def programming():
 
     return flask.render_template('programming.html', posts=post_bodies, status=status)
 
+@app.route('/writing/')
+def writing():
+
+    works = []
+
+    # Get all works in writing folder
+    files = glob.glob(WRITING_FOLDER + '*')
+
+    for path in files:
+
+        date: str = datetime.datetime.fromtimestamp(os.path.getctime(path)).strftime("%B %d, %Y")
+        name: str = path.split('/')[-1]
+
+        works.append({
+            'date' : date,
+            'name' : name,
+            'path' : path
+        })
+
+    return flask.render_template('writing.html', works=works)
+
+
+
+
+
 # About Page
 @app.route('/about/')
 def about():
@@ -147,6 +197,38 @@ def about():
     status = get_status()
 
     return flask.render_template('about.html', status=status)
+
+# MISC
+
+@app.route('/albumsquare/<user_id>/<int:rows>')
+def album_square(user_id, rows : int):
+
+    limit = rows ** 2
+
+    res = (1080/(rows))-rows
+
+    # Get top albums
+    r = requests.get(
+        MUSIC_API_URL +'/top/albums',
+        headers={
+            'token' : MUSIC_API_TOKEN,
+            'user' : user_id,
+            'limit' : str(limit)
+        })
+
+    top_albums = r.json()['top']
+    for album_index in range(0, len(top_albums)):
+        album = top_albums[album_index]
+
+        time = int(album['listen_time'])
+        hours = round(time/1000/60/60, 1)
+
+        top_albums[album_index]['listen_time'] = hours
+
+
+    return flask.render_template('album_square.html', top_albums=top_albums, limit=rows, res=res)
+
+
 
 if __name__ == "__main__":
     if DEV:

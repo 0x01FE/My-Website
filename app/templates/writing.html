@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="en">
+    <body>
+        <a href="/">home</a>
+        <br>
+        <br>
+        {% for work in works %}
+        <a href="/{{ work.path }}">{{ work.name }}</a> {{ work.date }}
+        {% endfor %}
+    </body>
+</html>

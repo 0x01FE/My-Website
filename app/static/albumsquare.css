@@ -1,0 +1,19 @@
+.albums {
+    height: 100%;
+
+    line-height: 0;
+    font-size: 0;
+}
+
+.albums img {
+    padding: 0 0;
+    margin: 0 0;
+    border: 0 0;
+}
+
+
+.body {
+    height: 100%;
+    padding: 0 0;
+    margin: 0 0;
+}
