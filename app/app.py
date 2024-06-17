@@ -25,6 +25,7 @@ DEV = int(config['NETWORK']['DEV'])
 
 MUSIC_API_TOKEN = config['AUTH']['MUSIC_API_TOKEN']
 MUSIC_API_URL = config['NETWORK']['MUSIC_API_URL']
+statuses = None
 
 def get_posts(category_filter : str | None = None) -> list[Post]:
     post_files = glob.glob(f'{POSTS_FOLDER}/*')
@@ -58,10 +59,18 @@ def get_posts(category_filter : str | None = None) -> list[Post]:
 
     return reversed(ordered_posts)
 
-def get_status() -> str:
+def read_status_file() -> list[str]:
     with open(STATUS_FILE, 'r', encoding='utf-8') as file:
-        statuses = file.readlines()
+        data = file.readlines()
 
+    result = []
+    for line in data:
+        if not (line == '\n' or line[0] == '#'):
+            result.append(line)
+
+    return result
+
+def get_status() -> str:
     status = random.randint(0, len(statuses) - 1)
 
     return markdown.markdown(statuses[status])
@@ -231,6 +240,10 @@ def album_square(user_id, rows : int):
 
 
 if __name__ == "__main__":
+
+    statuses = read_status_file()
+    print(statuses)
+
     if DEV:
         app.run(port=PORT)
     else:
