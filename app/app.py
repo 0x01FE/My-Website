@@ -25,7 +25,7 @@ DEV = int(config['NETWORK']['DEV'])
 
 MUSIC_API_TOKEN = config['AUTH']['MUSIC_API_TOKEN']
 MUSIC_API_URL = config['NETWORK']['MUSIC_API_URL']
-statuses = None
+statuses = {}
 
 def get_posts(category_filter : str | None = None) -> list[Post]:
     post_files = glob.glob(f'{POSTS_FOLDER}/*')
@@ -59,21 +59,39 @@ def get_posts(category_filter : str | None = None) -> list[Post]:
 
     return reversed(ordered_posts)
 
-def read_status_file() -> list[str]:
+def read_status_file() -> dict:
     with open(STATUS_FILE, 'r', encoding='utf-8') as file:
         data = file.readlines()
 
-    result = []
+    result = {}
+    current_key = None
     for line in data:
-        if not (line == '\n' or line[0] == '#'):
-            result.append(line)
+        if line[0] == '#':
+
+            # Empty Key-Value pairs will cause errors
+            if current_key:
+                if not result[current_key]:
+                    result.pop(current_key)
+
+            current_key = line.replace('#', '').strip()
+            result[current_key] = []
+        elif not (line == '\n'):
+            result[current_key].append(line)
 
     return result
 
 def get_status() -> str:
-    status = random.randint(0, len(statuses) - 1)
+    keys = list(statuses.keys())
 
-    return markdown.markdown(statuses[status])
+    selected_key = keys[random.randint(0, len(keys) - 1)]
+    section: list = statuses[selected_key]
+
+    print(selected_key)
+    print(section)
+
+    selected_status = section[random.randint(0, len(section) - 1)]
+
+    return f'<div title="{selected_key}">{markdown.markdown(selected_status)}</div>'
 
 # Main Page
 @app.route('/')
