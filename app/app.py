@@ -86,9 +86,6 @@ def get_status() -> str:
     selected_key = keys[random.randint(0, len(keys) - 1)]
     section: list = statuses[selected_key]
 
-    print(selected_key)
-    print(section)
-
     selected_status = section[random.randint(0, len(section) - 1)]
 
     return f'<div title="{selected_key}">{markdown.markdown(selected_status)}</div>'
@@ -108,6 +105,16 @@ def index():
     status = get_status()
 
     return flask.render_template('index.html', posts=post_bodies, status=status)
+
+# Posts
+@app.route('/post/<string:post_name>')
+def post(post_name: str):
+
+    for post in get_posts():
+        if post.title.replace(' ', '-') == post_name:
+            return flask.render_template('index.html', posts=[post.body], status=get_status())
+
+    flask.abort(404)
 
 # Games Page
 @app.route('/games/')
@@ -260,7 +267,6 @@ def album_square(user_id, rows : int):
 if __name__ == "__main__":
 
     statuses = read_status_file()
-    print(statuses)
 
     if DEV:
         app.run(port=PORT)
