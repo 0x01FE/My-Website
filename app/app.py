@@ -25,6 +25,7 @@ DEV = int(config['NETWORK']['DEV'])
 
 MUSIC_API_TOKEN = config['AUTH']['MUSIC_API_TOKEN']
 MUSIC_API_URL = config['NETWORK']['MUSIC_API_URL']
+statuses = {}
 
 def get_posts(category_filter : str | None = None) -> list[Post]:
     post_files = glob.glob(f'{POSTS_FOLDER}/*')
@@ -58,13 +59,36 @@ def get_posts(category_filter : str | None = None) -> list[Post]:
 
     return reversed(ordered_posts)
 
-def get_status() -> str:
+def read_status_file() -> dict:
     with open(STATUS_FILE, 'r', encoding='utf-8') as file:
-        statuses = file.readlines()
+        data = file.readlines()
 
-    status = random.randint(0, len(statuses) - 1)
+    result = {}
+    current_key = None
+    for line in data:
+        if line[0] == '#':
 
-    return markdown.markdown(statuses[status])
+            # Empty Key-Value pairs will cause errors
+            if current_key:
+                if not result[current_key]:
+                    result.pop(current_key)
+
+            current_key = line.replace('#', '').strip()
+            result[current_key] = []
+        elif not (line == '\n'):
+            result[current_key].append(line)
+
+    return result
+
+def get_status() -> str:
+    keys = list(statuses.keys())
+
+    selected_key = keys[random.randint(0, len(keys) - 1)]
+    section: list = statuses[selected_key]
+
+    selected_status = section[random.randint(0, len(section) - 1)]
+
+    return f'<div title="{selected_key}">{markdown.markdown(selected_status)}</div>'
 
 # Main Page
 @app.route('/')
@@ -81,6 +105,16 @@ def index():
     status = get_status()
 
     return flask.render_template('index.html', posts=post_bodies, status=status)
+
+# Posts
+@app.route('/post/<string:post_name>')
+def post(post_name: str):
+
+    for post in get_posts():
+        if post.title.replace(' ', '-') == post_name:
+            return flask.render_template('index.html', posts=[post.body], status=get_status())
+
+    flask.abort(404)
 
 # Games Page
 @app.route('/games/')
@@ -231,6 +265,9 @@ def album_square(user_id, rows : int):
 
 
 if __name__ == "__main__":
+
+    statuses = read_status_file()
+
     if DEV:
         app.run(port=PORT)
     else:
