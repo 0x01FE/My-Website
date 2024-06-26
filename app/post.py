@@ -8,7 +8,6 @@ class Post:
     date : datetime.datetime
     body : str
     file : str
-    id : int
     title : str
     url : str
 
@@ -20,13 +19,11 @@ class Post:
 
         self.category = lines[1].split(":")[1].strip()
         self.author = lines[2].split(":")[1].strip()
-        self.title = lines[6][2:-1]
+        self.title = lines[6].replace('#', '').strip()
         self.url = '/post/' + self.title.replace(' ', '-')
 
         date = lines[3].split(":")[1].strip()
         self.date = datetime.datetime.strptime(date, "%d-%m-%Y")
-
-        self.id = int(lines[4].split(":")[1].strip())
 
         self.body = markdown.markdown(f'# [{self.title}]({self.url})\n' + ''.join(lines[7:]))
 

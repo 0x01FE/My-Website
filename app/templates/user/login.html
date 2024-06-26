@@ -3,7 +3,7 @@
     <header>
         <link rel="shortcut icon" href="index_favicon.ico">
         <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-        <title>0x01fe.net - Register</title>
+        <title>0x01fe.net - Login</title>
     </header>
     <body>
         <div class="header">
@@ -23,13 +23,17 @@
             </div>
 
             <div class="dlog">
-                <h1>Register</h1>
-                <form method="post" action="/user/add/">
+                <h1>Login</h1>
+                <form method="post" action="/user/login/">
                     {{ form.hidden_tag() }}
                     Username: {{ form.username }} <br>
                     Password: {{ form.password }} <br>
-                    <input type="submit" value="Register">
+                    <input type="submit" value="Login">
                 </form>
+                <br>
+
+                <h1>Need to Register?</h1>
+                <a href="/user/register/">Register</a>
             </div>
         </div>
     </body>

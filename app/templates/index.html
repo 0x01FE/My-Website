@@ -19,7 +19,8 @@
                 <a href="/motion-pictures/">Motion Picture</a><br>
                 <a href="/programming/">Programming</a><br>
                 <a href="/writing/">Writing</a><br>
-                <a href="/about/">About</a>
+                <a href="/about/">About</a><br>
+                <a href="/login/">Login</a>
             </div>
 
             <!-- Main Page -->
@@ -27,15 +28,19 @@
             <div class="dlog">
                 {% for post in posts %}
                     <div class="post">
-                        {{ post[0]|safe }}
+                        {{ post[0].body|safe }}
                         <div class="comment-container">
                             {% for comment in post[1] %}
-                                <div class="comment">{{ comment|safe }}</div>
+                                <div class="comment">
+                                    <h4>{{ comment.username }}</h4>
+                                    <p>{{ comment.content }}</p>
+                                </div>
                             {% endfor %}
                             {% if user %}
                             <div class="comment-editor">
                                 <h3>{{ user }}</h3>
-                                <form method="post" action="/comment/">
+                                <form method="post" action="/comment/{{ post[0].title }}">
+                                    {{ form.hidden_tag() }}
                                     {{ form.textbox }}
                                     <input type="submit" value="Save">
                                 </form>

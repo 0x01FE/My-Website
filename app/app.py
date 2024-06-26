@@ -116,12 +116,21 @@ def index():
     # Get posts
     posts = get_posts()
 
-    # Get Comments
-    comments = []
+    if 'username' in flask.session:
+        user = flask.session['username']
+    else:
+        user = 'Anon'
 
+    # Get Comments
     posts_and_comments = []
     for post in posts:
-        posts_and_comments.append((post.body, comments))
+
+        comments = comment.get_comments(post.title)
+        posts_and_comments.append(({
+            "body" : post.body,
+            "title" : post.title
+            },
+            comments))
 
     # Get status
     status = get_status()
@@ -129,17 +138,7 @@ def index():
     # Setup Comment Form
     form = comment.CommentForm()
 
-    return flask.render_template('index.html', posts=posts_and_comments, status=status, form=form, user="yes")
-
-# Posts
-@app.route('/post/<string:post_name>')
-def post(post_name: str):
-
-    for post in get_posts():
-        if post.title.replace(' ', '-') == post_name:
-            return flask.render_template('index.html', posts=[post.body], status=get_status())
-
-    flask.abort(404)
+    return flask.render_template('index.html', posts=posts_and_comments, status=status, form=form, user=user)
 
 # Posts
 @app.route('/post/<string:post_name>')
