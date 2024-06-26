@@ -50,7 +50,7 @@ def add_user():
     with open(USERS_PATH, 'w') as file:
         file.write(json.dumps(user_data))
 
-    flask.redirect('/')
+    return flask.redirect('/')
 
 @user.route('/user/register/')
 def register_page():

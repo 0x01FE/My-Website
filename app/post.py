@@ -20,7 +20,7 @@ class Post:
         self.category = lines[1].split(":")[1].strip()
         self.author = lines[2].split(":")[1].strip()
         self.title = lines[6].replace('#', '').strip()
-        self.url = '/post/' + self.title.replace(' ', '-')
+        self.url = '/post/' + self.title
 
         date = lines[3].split(":")[1].strip()
         self.date = datetime.datetime.strptime(date, "%d-%m-%Y")
