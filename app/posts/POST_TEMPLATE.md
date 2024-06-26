@@ -2,7 +2,6 @@
 category: category
 author: author
 date: date
-id: post id
 
 # POST
 ## TITLE
