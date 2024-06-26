@@ -145,8 +145,18 @@ def index():
 def post(post_name: str):
 
     for post in get_posts():
-        if post.title.replace(' ', '-') == post_name:
-            return flask.render_template('index.html', posts=[post.body], status=get_status())
+        if post.title == post_name:
+            comments = comment.get_comments(post.title)
+
+            if 'username' in flask.session:
+                user = flask.session['username']
+            else:
+                user = 'Anon'
+
+            # Setup Comment Form
+            form = comment.CommentForm()
+
+            return flask.render_template('index.html', posts=[[{'body': post.body, 'title': post.title}, comments]], status=get_status(), form=form, user=user)
 
     flask.abort(404)
 
