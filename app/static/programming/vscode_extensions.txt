@@ -1,0 +1,12 @@
+EOF Mark,
+Glassit-VSC,
+JSON formatter,
+Pylance,
+Remote - SSH,
+Synthwave '84 Blues,
+Trailing Spaces,
+Helm Intellisense,
+background,
+Helium Icon Theme,
+SQLite Viewer,
+Docker

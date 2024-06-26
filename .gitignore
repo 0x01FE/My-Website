@@ -6,6 +6,8 @@ __pycache__
 docker-compose.yaml
 *.sh
 
+*.ini
+
 # Ignore images in posts
 *.jpg
 *.png
@@ -13,3 +15,8 @@ docker-compose.yaml
 # Flask Data & Config
 *.ini
 data
+*.gif
+
+# Writing
+writing
+

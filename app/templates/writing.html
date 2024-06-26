@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+    <body>
+        <a href="/">home</a>
+        <p>
+            This is just a little page where I post stuff I write. I was kind of unsure if I wanted this stuff out here but I think to those who know me it could serve as an interesting view into some thoughts that I don't often express elsewhere.
+        </p>
+        <br>
+        <br>
+        {% for work in works %}
+        <a href="/{{ work.path }}">{{ work.name }}</a> {{ work.date }}
+        {% endfor %}
+    </body>
+</html>

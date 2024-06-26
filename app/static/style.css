@@ -107,6 +107,39 @@ a:hover {
     text-decoration: none;
 }
 
+.rightbar {
+    height: fit-content;
+    align-self: flex-start;
+    top: 10px;
+
+    padding: 20pt;
+
+    margin: 5em 0;
+    margin-right: 2em;
+
+    border-style: var(--borders-style);
+    border-radius: var(--border-radius);
+    border-color: #1E2022;
+    background-color: var(--main-background);
+
+    opacity: 0.9;
+
+    /* box-shadow: -10px 10px var(--accent); */
+
+    /* Text Settings */
+    font-weight: bold;
+    line-height: 30pt;
+}
+
+.rightbar a {
+    text-decoration: none;
+}
+
+.rightbar h2 {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    line-height: normal;
+}
+
 .dlog {
     flex: 3;
 
@@ -158,7 +191,7 @@ a:hover {
     text-decoration: underline;
     text-decoration-style: solid;
     text-decoration-thickness: 0.25em;
-    text-underline-offset: 6px;
+    text-underline-offset: 7px;
     text-decoration-color: var(--primary);
 }
 
@@ -195,3 +228,49 @@ a:hover {
 .comment-editor textarea:focus {
     border: 3px solid var(--accent);
 }
+
+/* MUSIC */
+.albums {
+    height: fit-content;
+    align-self: flex-start;
+    top: 10px;
+
+    padding: 20pt;
+
+    margin: 5em 0;
+    margin-right: 2em;
+
+    border-style: var(--borders-style);
+    border-radius: var(--border-radius);
+    border-color: #1E2022;
+    background-color: var(--main-background);
+
+    /* Text Settings
+    font-weight: bold;
+    line-height: 30pt; */
+}
+
+
+.real-albums img {
+    height: 100px;
+    width: 100px;
+    padding: 0 0;
+    margin: 0 0;
+    border: 0 0;
+}
+
+.real-albums {
+    line-height: 0;
+    font-size: 0;
+    padding: 0 0;
+    margin: 0 0;
+}
+
+.albums h1 {
+    font-size: 2em;
+    text-align: center;
+    padding: 0 0;
+    margin: 15pt 0;
+    margin-top: -5pt;
+}
+

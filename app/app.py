@@ -1,8 +1,11 @@
+import os
 import glob
 import configparser
 import random
 import base64
+import datetime
 
+import requests
 import flask
 import flask_wtf.csrf
 import flask_session
@@ -22,6 +25,7 @@ CONFIG_PATH = "./config.ini"
 config = configparser.ConfigParser()
 config.read(CONFIG_PATH)
 
+WRITING_FOLDER = 'static/writing/'
 POSTS_FOLDER = config['POSTS']['POSTS_FOLDER']
 STATUS_FILE = config['STATUS']['STATUS_FILE']
 PORT = int(config['NETWORK']['PORT'])
@@ -37,6 +41,10 @@ csrf.init_app(app)
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SESSION_FILE_DIR'] = './data/.flask_session/'
 flask_session.Session(app)
+
+MUSIC_API_TOKEN = config['AUTH']['MUSIC_API_TOKEN']
+MUSIC_API_URL = config['NETWORK']['MUSIC_API_URL']
+statuses = {}
 
 def get_posts(category_filter : str | None = None) -> list[Post]:
     post_files = glob.glob(f'{POSTS_FOLDER}/*')
@@ -70,13 +78,36 @@ def get_posts(category_filter : str | None = None) -> list[Post]:
 
     return reversed(ordered_posts)
 
-def get_status() -> str:
+def read_status_file() -> dict:
     with open(STATUS_FILE, 'r', encoding='utf-8') as file:
-        statuses = file.readlines()
+        data = file.readlines()
 
-    status = random.randint(0, len(statuses) - 1)
+    result = {}
+    current_key = None
+    for line in data:
+        if line[0] == '#':
 
-    return markdown.markdown(statuses[status])
+            # Empty Key-Value pairs will cause errors
+            if current_key:
+                if not result[current_key]:
+                    result.pop(current_key)
+
+            current_key = line.replace('#', '').strip()
+            result[current_key] = []
+        elif not (line == '\n'):
+            result[current_key].append(line)
+
+    return result
+
+def get_status() -> str:
+    keys = list(statuses.keys())
+
+    selected_key = keys[random.randint(0, len(keys) - 1)]
+    section: list = statuses[selected_key]
+
+    selected_status = section[random.randint(0, len(section) - 1)]
+
+    return f'<div title="{selected_key}">{markdown.markdown(selected_status)}</div>'
 
 # Main Page
 @app.route('/')
@@ -99,6 +130,26 @@ def index():
     form = comment.CommentForm()
 
     return flask.render_template('index.html', posts=posts_and_comments, status=status, form=form, user="yes")
+
+# Posts
+@app.route('/post/<string:post_name>')
+def post(post_name: str):
+
+    for post in get_posts():
+        if post.title.replace(' ', '-') == post_name:
+            return flask.render_template('index.html', posts=[post.body], status=get_status())
+
+    flask.abort(404)
+
+# Posts
+@app.route('/post/<string:post_name>')
+def post(post_name: str):
+
+    for post in get_posts():
+        if post.title.replace(' ', '-') == post_name:
+            return flask.render_template('index.html', posts=[post.body], status=get_status())
+
+    flask.abort(404)
 
 # Games Page
 @app.route('/games/')
@@ -130,7 +181,25 @@ def music():
     # Get status
     status = get_status()
 
-    return flask.render_template('music.html', posts=post_bodies, status=status)
+    # Get top albums
+    r = requests.get(
+        MUSIC_API_URL +'/top/albums',
+        headers={
+            'token' : MUSIC_API_TOKEN,
+            'user' : '1',
+            'limit' : '9'
+        })
+
+    top_albums = r.json()['top']
+    for album_index in range(0, len(top_albums)):
+        album = top_albums[album_index]
+
+        time = int(album['listen_time'])
+        hours = round(time/1000/60/60, 1)
+
+        top_albums[album_index]['listen_time'] = hours
+
+    return flask.render_template('music.html', posts=post_bodies, status=status, top_albums=top_albums)
 
 # Motion Pictures Page
 @app.route('/motion-pictures/')
@@ -164,6 +233,31 @@ def programming():
 
     return flask.render_template('programming.html', posts=post_bodies, status=status)
 
+@app.route('/writing/')
+def writing():
+
+    works = []
+
+    # Get all works in writing folder
+    files = glob.glob(WRITING_FOLDER + '*')
+
+    for path in files:
+
+        date: str = datetime.datetime.fromtimestamp(os.path.getctime(path)).strftime("%B %d, %Y")
+        name: str = path.split('/')[-1]
+
+        works.append({
+            'date' : date,
+            'name' : name,
+            'path' : path
+        })
+
+    return flask.render_template('writing.html', works=works)
+
+
+
+
+
 # About Page
 @app.route('/about/')
 def about():
@@ -173,7 +267,42 @@ def about():
 
     return flask.render_template('about.html', status=status)
 
+# MISC
+
+@app.route('/albumsquare/<user_id>/<int:rows>')
+def album_square(user_id, rows : int):
+
+    limit = rows ** 2
+
+    res = (1080/(rows))-rows
+
+    # Get top albums
+    r = requests.get(
+        MUSIC_API_URL +'/top/albums',
+        headers={
+            'token' : MUSIC_API_TOKEN,
+            'user' : user_id,
+            'limit' : str(limit)
+        })
+
+    top_albums = r.json()['top']
+    for album_index in range(0, len(top_albums)):
+        album = top_albums[album_index]
+
+        time = int(album['listen_time'])
+        hours = round(time/1000/60/60, 1)
+
+        top_albums[album_index]['listen_time'] = hours
+
+
+    return flask.render_template('album_square.html', top_albums=top_albums, limit=rows, res=res)
+
+
+
 if __name__ == "__main__":
+
+    statuses = read_status_file()
+
     if DEV:
         app.run(port=PORT)
     else:
