@@ -19,6 +19,10 @@ html {
     --primary20: hsla(209, 61%, 71%, 20%);
     --primary40: hsla(209, 61%, 71%, 40%);
     --secondary: hsl(277, 81%, 33%);
+    --secondary10: hsla(277, 81%, 33%, 10%);
+    --secondary20: hsla(277, 81%, 33%, 20%);
+    --secondary30: hsla(277, 81%, 33%, 30%);
+    --secondary40: hsla(277, 81%, 33%, 40%);
     --secondary50: hsla(277, 81%, 33%, 50%);
     --accent: hsl(291, 81%, 60%);
     --accent75: hsla(291, 81%, 60%, 75%);
@@ -43,7 +47,24 @@ a:hover {
     color: var(--accent);
 }
 
+blockquote {
+    background-color: var(--secondary10);
+    border-style: var(--borders-style);
+    border-radius: 7.5px;
+    padding: 0.25em;
+}
 
+.post blockquote p {
+    text-indent: 1.5em;
+}
+
+.post blockquote li p {
+    text-indent: 0;
+}
+
+li {
+    margin-left: 4em;
+}
 
 
 /* Other */
@@ -206,6 +227,10 @@ a:hover {
     text-indent: 3em;
 }
 
+.post-date {
+    float: right;
+}
+
 .comment-container {
     background-color: var(--primary40);
     border-style: var(--borders-style);
@@ -213,6 +238,24 @@ a:hover {
 
     padding: 1em;
     margin: 1em;
+}
+
+.comment {
+    background-color: var(--primary40);
+    border-style: var(--borders-style);
+    border-radius: 5px;
+
+    margin: 0.25em;
+    padding: 0.25em;
+}
+
+.comment h4 {
+    margin: 0.25em;
+}
+
+.comment p {
+    margin: 0.25em;
+    text-indent: 1em;
 }
 
 .comment-editor textarea {

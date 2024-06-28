@@ -28,8 +28,12 @@
             <div class="dlog">
                 {% for post in posts %}
                     <div class="post">
+                        <div class="post-date">
+                            {{ post[0].date }}
+                        </div>
                         {{ post[0].body|safe }}
                         <div class="comment-container">
+                            <h2>Comments</h2>
                             {% for comment in post[1] %}
                                 <div class="comment">
                                     <h4>{{ comment.username }}</h4>
@@ -38,7 +42,7 @@
                             {% endfor %}
                             {% if user %}
                             <div class="comment-editor">
-                                <h3>{{ user }}</h3>
+                                <h4>{{ user }}</h4>
                                 <form method="post" action="/comment/{{ post[0].title }}">
                                     {{ form.hidden_tag() }}
                                     {{ form.textbox }}

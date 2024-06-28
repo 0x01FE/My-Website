@@ -128,7 +128,8 @@ def index():
         comments = comment.get_comments(post.title)
         posts_and_comments.append(({
             "body" : post.body,
-            "title" : post.title
+            "title" : post.title,
+            "date" : post.get_date()
             },
             comments))
 

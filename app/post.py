@@ -25,5 +25,7 @@ class Post:
         date = lines[3].split(":")[1].strip()
         self.date = datetime.datetime.strptime(date, "%d-%m-%Y")
 
-        self.body = markdown.markdown(f'# [{self.title}]({self.url})\n' + ''.join(lines[7:]))
+        self.body = markdown.markdown(f'# [{self.title}]({self.url})\n' + ''.join(lines[7:]), extensions=['footnotes'])
 
+    def get_date(self) -> str:
+        return self.date.strftime("%B %d, %Y")

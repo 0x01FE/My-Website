@@ -40,7 +40,7 @@ def add_user():
 
     # check if user exists
     if username in user_data:
-        flask.abort(400)
+        return 'ERROR PROCESSING REQUEST - That user already exists'
 
     # Store password / server side cookie
     user_data[username] = base64.b64encode(password.encode()).decode()
@@ -71,11 +71,11 @@ def login_user():
 
     # check if user exists
     if username not in user_data:
-        flask.abort(400)
+        return 'ERROR PROCESSING REQUEST - Bad username OR password'
 
     # Does password match?
     if user_data[username] != password:
-        flask.abort(400)
+        return 'ERROR PROCESSING REQUEST - Bad username OR password'
 
     flask.session['username'] = username
 

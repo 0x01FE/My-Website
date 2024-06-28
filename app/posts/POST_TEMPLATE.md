@@ -4,6 +4,6 @@ author: author
 date: date
 
 # POST
-## TITLE
+# TITLE
 ### DATE OR SUBTITLE
 POST TEXT
