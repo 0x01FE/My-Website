@@ -139,7 +139,7 @@ def index():
     # Setup Comment Form
     form = comment.CommentForm()
 
-    return flask.render_template('index.html', posts=posts_and_comments, status=status, form=form, user=user)
+    return flask.render_template('index.html', posts=posts_and_comments, status=status, form=form, user=user, title='0x01fe.net')
 
 # Posts
 @app.route('/post/<string:post_name>')
@@ -157,25 +157,41 @@ def post(post_name: str):
             # Setup Comment Form
             form = comment.CommentForm()
 
-            return flask.render_template('index.html', posts=[[{'body': post.body, 'title': post.title}, comments]], status=get_status(), form=form, user=user)
+            return flask.render_template('index.html', posts=[[{'body': post.body, 'title': post.title}, comments]], status=get_status(), form=form, user=user, title='0x01fe.net')
 
     flask.abort(404)
 
 # Games Page
-@app.route('/games/')
-def games():
+@app.route('/category/<string:category>/')
+def category_filter(category: str):
 
     # Get posts
-    posts = get_posts(category_filter="games")
+    posts = get_posts(category_filter=category)
 
-    post_bodies = []
+    if 'username' in flask.session:
+        user = flask.session['username']
+    else:
+        user = 'Anon'
+
+    # Get Comments
+    posts_and_comments = []
     for post in posts:
-        post_bodies.append(post.body)
+
+        comments = comment.get_comments(post.title)
+        posts_and_comments.append(({
+            "body" : post.body,
+            "title" : post.title,
+            "date" : post.get_date()
+            },
+            comments))
 
     # Get status
     status = get_status()
 
-    return flask.render_template('games.html', posts=post_bodies, status=status)
+    # Setup Comment Form
+    form = comment.CommentForm()
+
+    return flask.render_template('index.html', posts=posts_and_comments, status=status, form=form, user=user, title=category.replace('-', ' '))
 
 # Music Page
 @app.route('/music/')
@@ -210,22 +226,6 @@ def music():
         top_albums[album_index]['listen_time'] = hours
 
     return flask.render_template('music.html', posts=post_bodies, status=status, top_albums=top_albums)
-
-# Motion Pictures Page
-@app.route('/motion-pictures/')
-def motion_pictures():
-
-    # Get posts
-    posts = get_posts(category_filter="motion-pictures")
-
-    post_bodies = []
-    for post in posts:
-        post_bodies.append(post.body)
-
-    # Get status
-    status = get_status()
-
-    return flask.render_template('motion-pictures.html', posts=post_bodies, status=status)
 
 # Programming Page
 @app.route('/programming/')
