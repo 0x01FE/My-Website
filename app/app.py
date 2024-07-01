@@ -46,7 +46,7 @@ MUSIC_API_TOKEN = config['AUTH']['MUSIC_API_TOKEN']
 MUSIC_API_URL = config['NETWORK']['MUSIC_API_URL']
 statuses = {}
 
-def get_posts(category_filter : str | None = None) -> list[Post]:
+def get_posts_and_comments(category_filter : str | None = None) -> list[tuple[dict, list]]:
     post_files = glob.glob(f'{POSTS_FOLDER}/*')
     try:
         post_files.remove(f'{POSTS_FOLDER}/POST_TEMPLATE.md')
@@ -76,7 +76,22 @@ def get_posts(category_filter : str | None = None) -> list[Post]:
         ordered_posts.append(most_recent)
         posts.remove(most_recent)
 
-    return reversed(ordered_posts)
+    posts = reversed(ordered_posts)
+
+    # Get Comments
+    posts_and_comments = []
+
+    for post in posts:
+
+        comments = comment.get_comments(post.title)
+        posts_and_comments.append(({
+            "body" : post.body,
+            "title" : post.title,
+            "date" : post.get_date()
+            },
+            comments))
+
+    return posts_and_comments
 
 def read_status_file() -> dict:
     with open(STATUS_FILE, 'r', encoding='utf-8') as file:
@@ -114,24 +129,12 @@ def get_status() -> str:
 def index():
 
     # Get posts
-    posts = get_posts()
+    posts_and_comments = get_posts_and_comments()
 
     if 'username' in flask.session:
         user = flask.session['username']
     else:
         user = 'Anon'
-
-    # Get Comments
-    posts_and_comments = []
-    for post in posts:
-
-        comments = comment.get_comments(post.title)
-        posts_and_comments.append(({
-            "body" : post.body,
-            "title" : post.title,
-            "date" : post.get_date()
-            },
-            comments))
 
     # Get status
     status = get_status()
@@ -145,9 +148,8 @@ def index():
 @app.route('/post/<string:post_name>')
 def post(post_name: str):
 
-    for post in get_posts():
-        if post.title == post_name:
-            comments = comment.get_comments(post.title)
+    for post in get_posts_and_comments():
+        if post[0]['title'] == post_name:
 
             if 'username' in flask.session:
                 user = flask.session['username']
@@ -157,7 +159,7 @@ def post(post_name: str):
             # Setup Comment Form
             form = comment.CommentForm()
 
-            return flask.render_template('index.html', posts=[[{'body': post.body, 'title': post.title}, comments]], status=get_status(), form=form, user=user, title='0x01fe.net')
+            return flask.render_template('index.html', posts=[post], status=get_status(), form=form, user=user, title='0x01fe.net')
 
     flask.abort(404)
 
@@ -166,24 +168,12 @@ def post(post_name: str):
 def category_filter(category: str):
 
     # Get posts
-    posts = get_posts(category_filter=category)
+    posts_and_comments = get_posts_and_comments(category_filter=category)
 
     if 'username' in flask.session:
         user = flask.session['username']
     else:
         user = 'Anon'
-
-    # Get Comments
-    posts_and_comments = []
-    for post in posts:
-
-        comments = comment.get_comments(post.title)
-        posts_and_comments.append(({
-            "body" : post.body,
-            "title" : post.title,
-            "date" : post.get_date()
-            },
-            comments))
 
     # Get status
     status = get_status()
@@ -198,11 +188,12 @@ def category_filter(category: str):
 def music():
 
     # Get posts
-    posts = get_posts(category_filter="music")
+    posts_and_comments = get_posts_and_comments(category_filter="music")
 
-    post_bodies = []
-    for post in posts:
-        post_bodies.append(post.body)
+    if 'username' in flask.session:
+        user = flask.session['username']
+    else:
+        user = 'Anon'
 
     # Get status
     status = get_status()
@@ -225,23 +216,30 @@ def music():
 
         top_albums[album_index]['listen_time'] = hours
 
-    return flask.render_template('music.html', posts=post_bodies, status=status, top_albums=top_albums)
+    # Setup Comment Form
+    form = comment.CommentForm()
+
+    return flask.render_template('music.html', posts=posts_and_comments, status=status, top_albums=top_albums, form=form, user=user)
 
 # Programming Page
 @app.route('/programming/')
 def programming():
 
     # Get posts
-    posts = get_posts(category_filter="programming")
+    posts_and_comments = get_posts_and_comments(category_filter="programming")
 
-    post_bodies = []
-    for post in posts:
-        post_bodies.append(post.body)
+    if 'username' in flask.session:
+        user = flask.session['username']
+    else:
+        user = 'Anon'
 
     # Get status
     status = get_status()
 
-    return flask.render_template('programming.html', posts=post_bodies, status=status)
+    # Setup Comment Form
+    form = comment.CommentForm()
+
+    return flask.render_template('programming.html', posts=posts_and_comments, form=form, user=user, status=status)
 
 @app.route('/writing/')
 def writing():
