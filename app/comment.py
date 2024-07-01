@@ -1,4 +1,5 @@
 import json
+import os
 
 import flask
 import flask_wtf.csrf
@@ -53,4 +54,8 @@ def get_comments(post_title : int) -> list[dict]:
     else:
         return []
 
+# Check Comments file exists
+if not os.path.exists(COMMENTS_PATH):
+    with open(COMMENTS_PATH, 'w+') as file:
+        file.write('{}')
 

@@ -1,5 +1,6 @@
 import base64
 import json
+import os
 
 import flask
 import flask_wtf.csrf
@@ -94,3 +95,8 @@ def logout_user():
         flask.session.pop('username')
 
     return flask.redirect('/')
+
+# Check User file exists
+if not os.path.exists(USERS_PATH):
+    with open(USERS_PATH, 'w+') as file:
+        file.write('{}')

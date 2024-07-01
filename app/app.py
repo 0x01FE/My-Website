@@ -161,7 +161,7 @@ def post(post_name: str):
 
     flask.abort(404)
 
-# Games Page
+# Category's Endpoint
 @app.route('/category/<string:category>/')
 def category_filter(category: str):
 
@@ -263,10 +263,6 @@ def writing():
         })
 
     return flask.render_template('writing.html', works=works)
-
-
-
-
 
 # About Page
 @app.route('/about/')
