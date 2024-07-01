@@ -29,12 +29,12 @@
                 {% for post in posts %}
                     <div class="post">
                         <div class="post-date">
-                            {{ post[0].date }}
+                            {{ post.date_str }}
                         </div>
-                        {{ post[0].body|safe }}
+                        {{ post.body|safe }}
                         <div class="comment-container">
                             <h2>Comments</h2>
-                            {% for comment in post[1] %}
+                            {% for comment in post.comments %}
                                 <div class="comment">
                                     <h4>{{ comment.username }}</h4>
                                     <p>{{ comment.content }}</p>
@@ -43,7 +43,7 @@
                             {% if user %}
                             <div class="comment-editor">
                                 <h4>{{ user }}</h4>
-                                <form method="post" action="/comment/{{ post[0].title }}">
+                                <form method="post" action="/comment/{{ post.title }}">
                                     {{ form.hidden_tag() }}
                                     {{ form.textbox }}
                                     <input type="submit" value="Save">

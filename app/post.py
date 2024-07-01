@@ -1,15 +1,19 @@
 import markdown
 import datetime
 
+import comment
+
 class Post:
 
     category : str
     author : str
     date : datetime.datetime
+    date_str : str
     body : str
     file : str
     title : str
     url : str
+    comments : list[dict]
 
     def __init__(self, file_path):
         self.file = file_path
@@ -24,8 +28,7 @@ class Post:
 
         date = lines[3].split(":")[1].strip()
         self.date = datetime.datetime.strptime(date, "%d-%m-%Y")
+        self.date_str = self.date.strftime("%B %d, %Y")
 
         self.body = markdown.markdown(f'# [{self.title}]({self.url})\n' + ''.join(lines[7:]), extensions=['footnotes'])
-
-    def get_date(self) -> str:
-        return self.date.strftime("%B %d, %Y")
+        self.comments = comment.get_comments(self.title)

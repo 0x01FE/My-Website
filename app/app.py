@@ -46,7 +46,7 @@ MUSIC_API_TOKEN = config['AUTH']['MUSIC_API_TOKEN']
 MUSIC_API_URL = config['NETWORK']['MUSIC_API_URL']
 statuses = {}
 
-def get_posts_and_comments(category_filter : str | None = None) -> list[tuple[dict, list]]:
+def get_posts(category_filter : str | None = None) -> list[tuple[dict, list]]:
     post_files = glob.glob(f'{POSTS_FOLDER}/*')
     try:
         post_files.remove(f'{POSTS_FOLDER}/POST_TEMPLATE.md')
@@ -76,22 +76,12 @@ def get_posts_and_comments(category_filter : str | None = None) -> list[tuple[di
         ordered_posts.append(most_recent)
         posts.remove(most_recent)
 
-    posts = reversed(ordered_posts)
+    # Convert to dict
+    posts = []
+    for post in reversed(ordered_posts):
+        posts.append(post.__dict__)
 
-    # Get Comments
-    posts_and_comments = []
-
-    for post in posts:
-
-        comments = comment.get_comments(post.title)
-        posts_and_comments.append(({
-            "body" : post.body,
-            "title" : post.title,
-            "date" : post.get_date()
-            },
-            comments))
-
-    return posts_and_comments
+    return posts
 
 def read_status_file() -> dict:
     with open(STATUS_FILE, 'r', encoding='utf-8') as file:
@@ -129,7 +119,7 @@ def get_status() -> str:
 def index():
 
     # Get posts
-    posts_and_comments = get_posts_and_comments()
+    posts = get_posts()
 
     if 'username' in flask.session:
         user = flask.session['username']
@@ -142,14 +132,14 @@ def index():
     # Setup Comment Form
     form = comment.CommentForm()
 
-    return flask.render_template('index.html', posts=posts_and_comments, status=status, form=form, user=user, title='0x01fe.net')
+    return flask.render_template('index.html', posts=posts, status=status, form=form, user=user, title='0x01fe.net')
 
 # Posts
 @app.route('/post/<string:post_name>')
 def post(post_name: str):
 
-    for post in get_posts_and_comments():
-        if post[0]['title'] == post_name:
+    for post in get_posts():
+        if post['title'] == post_name:
 
             if 'username' in flask.session:
                 user = flask.session['username']
@@ -168,7 +158,7 @@ def post(post_name: str):
 def category_filter(category: str):
 
     # Get posts
-    posts_and_comments = get_posts_and_comments(category_filter=category)
+    posts = get_posts(category_filter=category)
 
     if 'username' in flask.session:
         user = flask.session['username']
@@ -181,14 +171,14 @@ def category_filter(category: str):
     # Setup Comment Form
     form = comment.CommentForm()
 
-    return flask.render_template('index.html', posts=posts_and_comments, status=status, form=form, user=user, title=category.replace('-', ' '))
+    return flask.render_template('index.html', posts=posts, status=status, form=form, user=user, title=category.replace('-', ' '))
 
 # Music Page
 @app.route('/music/')
 def music():
 
     # Get posts
-    posts_and_comments = get_posts_and_comments(category_filter="music")
+    posts = get_posts(category_filter="music")
 
     if 'username' in flask.session:
         user = flask.session['username']
@@ -219,14 +209,14 @@ def music():
     # Setup Comment Form
     form = comment.CommentForm()
 
-    return flask.render_template('music.html', posts=posts_and_comments, status=status, top_albums=top_albums, form=form, user=user)
+    return flask.render_template('music.html', posts=posts, status=status, top_albums=top_albums, form=form, user=user)
 
 # Programming Page
 @app.route('/programming/')
 def programming():
 
     # Get posts
-    posts_and_comments = get_posts_and_comments(category_filter="programming")
+    posts_and_comments = get_posts(category_filter="programming")
 
     if 'username' in flask.session:
         user = flask.session['username']
