@@ -13,19 +13,14 @@ import waitress
 import markdown
 
 from post import Post
-import comment
-import user
 
 app = flask.Flask(__name__, static_url_path='', static_folder='static')
-app.register_blueprint(comment.comments)
-app.register_blueprint(user.user)
 
 # CONFIG
 CONFIG_PATH = "./config.ini"
 config = configparser.ConfigParser()
 config.read(CONFIG_PATH)
 
-WRITING_FOLDER = 'static/writing/'
 POSTS_FOLDER = config['POSTS']['POSTS_FOLDER']
 STATUS_FILE = config['STATUS']['STATUS_FILE']
 PORT = int(config['NETWORK']['PORT'])
@@ -121,18 +116,10 @@ def index():
     # Get posts
     posts = get_posts()
 
-    if 'username' in flask.session:
-        user = flask.session['username']
-    else:
-        user = 'Anon'
-
     # Get status
     status = get_status()
 
-    # Setup Comment Form
-    form = comment.CommentForm()
-
-    return flask.render_template('index.html', posts=posts, status=status, form=form, user=user, title='0x01fe.net')
+    return flask.render_template('index.html', posts=posts, status=status, title='0x01fe.net')
 
 # Posts
 @app.route('/post/<string:post_name>')
@@ -141,15 +128,7 @@ def post(post_name: str):
     for post in get_posts():
         if post['title'] == post_name:
 
-            if 'username' in flask.session:
-                user = flask.session['username']
-            else:
-                user = 'Anon'
-
-            # Setup Comment Form
-            form = comment.CommentForm()
-
-            return flask.render_template('index.html', posts=[post], status=get_status(), form=form, user=user, title='0x01fe.net')
+            return flask.render_template('index.html', posts=[post], status=get_status(), title='0x01fe.net')
 
     flask.abort(404)
 
@@ -160,18 +139,10 @@ def category_filter(category: str):
     # Get posts
     posts = get_posts(category_filter=category)
 
-    if 'username' in flask.session:
-        user = flask.session['username']
-    else:
-        user = 'Anon'
-
     # Get status
     status = get_status()
 
-    # Setup Comment Form
-    form = comment.CommentForm()
-
-    return flask.render_template('index.html', posts=posts, status=status, form=form, user=user, title=category.replace('-', ' '))
+    return flask.render_template('index.html', posts=posts, status=status, title=category.replace('-', ' '))
 
 # Music Page
 @app.route('/music/')
@@ -179,11 +150,6 @@ def music():
 
     # Get posts
     posts = get_posts(category_filter="music")
-
-    if 'username' in flask.session:
-        user = flask.session['username']
-    else:
-        user = 'Anon'
 
     # Get status
     status = get_status()
@@ -206,10 +172,7 @@ def music():
 
         top_albums[album_index]['listen_time'] = hours
 
-    # Setup Comment Form
-    form = comment.CommentForm()
-
-    return flask.render_template('music.html', posts=posts, status=status, top_albums=top_albums, form=form, user=user)
+    return flask.render_template('music.html', posts=posts, status=status, top_albums=top_albums)
 
 # Programming Page
 @app.route('/programming/')
@@ -218,18 +181,10 @@ def programming():
     # Get posts
     posts_and_comments = get_posts(category_filter="programming")
 
-    if 'username' in flask.session:
-        user = flask.session['username']
-    else:
-        user = 'Anon'
-
     # Get status
     status = get_status()
 
-    # Setup Comment Form
-    form = comment.CommentForm()
-
-    return flask.render_template('programming.html', posts=posts_and_comments, form=form, user=user, status=status)
+    return flask.render_template('programming.html', posts=posts_and_comments, status=status)
 
 # About Page
 @app.route('/about/')

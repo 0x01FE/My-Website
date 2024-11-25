@@ -31,25 +31,6 @@
                             {{ post.date_str }}
                         </div>
                         {{ post.body|safe }}
-                        <div class="comment-container">
-                            <h2>Comments</h2>
-                            {% for comment in post.comments %}
-                                <div class="comment">
-                                    <h4>{{ comment.username }}</h4>
-                                    <p>{{ comment.content }}</p>
-                                </div>
-                            {% endfor %}
-                            {% if user %}
-                            <div class="comment-editor">
-                                <h4>{{ user }}</h4>
-                                <form method="post" action="/comment/{{ post.title }}">
-                                    {{ form.hidden_tag() }}
-                                    {{ form.textbox }}
-                                    <input type="submit" value="Save">
-                                </form>
-                            </div>
-                            {% endif %}
-                        </div>
                     </div>
                 {% endfor %}
             </div>
