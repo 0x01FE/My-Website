@@ -40,6 +40,10 @@ flask_session.Session(app)
 MUSIC_API_TOKEN = config['AUTH']['MUSIC_API_TOKEN']
 MUSIC_API_URL = config['NETWORK']['MUSIC_API_URL']
 statuses = {}
+header_background_images = [
+    "canal-banner2.jpg",
+    "real-greensilt-banner.png"
+]
 
 def get_posts(category_filter : str | None = None) -> list[tuple[dict, list]]:
     post_files = glob.glob(f'{POSTS_FOLDER}/*')
@@ -109,6 +113,9 @@ def get_status() -> str:
 
     return f'<div title="{selected_key}">{markdown.markdown(selected_status)}</div>'
 
+def get_header_image() -> str:
+    return header_background_images[random.randint(0, len(header_background_images) - 1)]
+
 # Main Page
 @app.route('/')
 def index():
@@ -119,7 +126,9 @@ def index():
     # Get status
     status = get_status()
 
-    return flask.render_template('index.html', posts=posts, status=status, title='0x01fe.net')
+    img = get_header_image()
+
+    return flask.render_template('index.html', posts=posts, status=status, title='0x01fe.net', header_background_image=img)
 
 # Posts
 @app.route('/post/<string:post_name>')
