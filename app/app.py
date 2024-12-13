@@ -2,17 +2,25 @@ import os
 import glob
 import configparser
 import random
+import base64
 import datetime
 
 import requests
 import flask
+import flask_wtf.csrf
+import flask_session
 import waitress
 import markdown
 
 from post import Post
+import comment
+import user
 
 app = flask.Flask(__name__, static_url_path='', static_folder='static')
+app.register_blueprint(comment.comments)
+app.register_blueprint(user.user)
 
+# CONFIG
 CONFIG_PATH = "./config.ini"
 config = configparser.ConfigParser()
 config.read(CONFIG_PATH)
@@ -23,11 +31,22 @@ STATUS_FILE = config['STATUS']['STATUS_FILE']
 PORT = int(config['NETWORK']['PORT'])
 DEV = int(config['NETWORK']['DEV'])
 
+
+# CSRF Protect
+app.config['SECRET_KEY'] = base64.b64decode(config["FLASK"]["SECRET"])
+csrf = flask_wtf.csrf.CSRFProtect()
+csrf.init_app(app)
+
+# Session Setup
+app.config['SESSION_TYPE'] = 'filesystem'
+app.config['SESSION_FILE_DIR'] = './data/.flask_session/'
+flask_session.Session(app)
+
 MUSIC_API_TOKEN = config['AUTH']['MUSIC_API_TOKEN']
 MUSIC_API_URL = config['NETWORK']['MUSIC_API_URL']
 statuses = {}
 
-def get_posts(category_filter : str | None = None) -> list[Post]:
+def get_posts(category_filter : str | None = None) -> list[tuple[dict, list]]:
     post_files = glob.glob(f'{POSTS_FOLDER}/*')
     try:
         post_files.remove(f'{POSTS_FOLDER}/POST_TEMPLATE.md')
@@ -57,7 +76,12 @@ def get_posts(category_filter : str | None = None) -> list[Post]:
         ordered_posts.append(most_recent)
         posts.remove(most_recent)
 
-    return reversed(ordered_posts)
+    # Convert to dict
+    posts = []
+    for post in reversed(ordered_posts):
+        posts.append(post.__dict__)
+
+    return posts
 
 def read_status_file() -> dict:
     with open(STATUS_FILE, 'r', encoding='utf-8') as file:
@@ -97,40 +121,57 @@ def index():
     # Get posts
     posts = get_posts()
 
-    post_bodies = []
-    for post in posts:
-        post_bodies.append(post.body)
+    if 'username' in flask.session:
+        user = flask.session['username']
+    else:
+        user = 'Anon'
 
     # Get status
     status = get_status()
 
-    return flask.render_template('index.html', posts=post_bodies, status=status)
+    # Setup Comment Form
+    form = comment.CommentForm()
+
+    return flask.render_template('index.html', posts=posts, status=status, form=form, user=user, title='0x01fe.net')
 
 # Posts
 @app.route('/post/<string:post_name>')
 def post(post_name: str):
 
     for post in get_posts():
-        if post.title.replace(' ', '-') == post_name:
-            return flask.render_template('index.html', posts=[post.body], status=get_status())
+        if post['title'] == post_name:
+
+            if 'username' in flask.session:
+                user = flask.session['username']
+            else:
+                user = 'Anon'
+
+            # Setup Comment Form
+            form = comment.CommentForm()
+
+            return flask.render_template('index.html', posts=[post], status=get_status(), form=form, user=user, title='0x01fe.net')
 
     flask.abort(404)
 
-# Games Page
-@app.route('/games/')
-def games():
+# Category's Endpoint
+@app.route('/category/<string:category>/')
+def category_filter(category: str):
 
     # Get posts
-    posts = get_posts(category_filter="games")
+    posts = get_posts(category_filter=category)
 
-    post_bodies = []
-    for post in posts:
-        post_bodies.append(post.body)
+    if 'username' in flask.session:
+        user = flask.session['username']
+    else:
+        user = 'Anon'
 
     # Get status
     status = get_status()
 
-    return flask.render_template('games.html', posts=post_bodies, status=status)
+    # Setup Comment Form
+    form = comment.CommentForm()
+
+    return flask.render_template('index.html', posts=posts, status=status, form=form, user=user, title=category.replace('-', ' '))
 
 # Music Page
 @app.route('/music/')
@@ -139,9 +180,10 @@ def music():
     # Get posts
     posts = get_posts(category_filter="music")
 
-    post_bodies = []
-    for post in posts:
-        post_bodies.append(post.body)
+    if 'username' in flask.session:
+        user = flask.session['username']
+    else:
+        user = 'Anon'
 
     # Get status
     status = get_status()
@@ -164,64 +206,30 @@ def music():
 
         top_albums[album_index]['listen_time'] = hours
 
-    return flask.render_template('music.html', posts=post_bodies, status=status, top_albums=top_albums)
+    # Setup Comment Form
+    form = comment.CommentForm()
 
-# Motion Pictures Page
-@app.route('/motion-pictures/')
-def motion_pictures():
-
-    # Get posts
-    posts = get_posts(category_filter="motion-pictures")
-
-    post_bodies = []
-    for post in posts:
-        post_bodies.append(post.body)
-
-    # Get status
-    status = get_status()
-
-    return flask.render_template('motion-pictures.html', posts=post_bodies, status=status)
+    return flask.render_template('music.html', posts=posts, status=status, top_albums=top_albums, form=form, user=user)
 
 # Programming Page
 @app.route('/programming/')
 def programming():
 
     # Get posts
-    posts = get_posts(category_filter="programming")
+    posts_and_comments = get_posts(category_filter="programming")
 
-    post_bodies = []
-    for post in posts:
-        post_bodies.append(post.body)
+    if 'username' in flask.session:
+        user = flask.session['username']
+    else:
+        user = 'Anon'
 
     # Get status
     status = get_status()
 
-    return flask.render_template('programming.html', posts=post_bodies, status=status)
+    # Setup Comment Form
+    form = comment.CommentForm()
 
-@app.route('/writing/')
-def writing():
-
-    works = []
-
-    # Get all works in writing folder
-    files = glob.glob(WRITING_FOLDER + '*')
-
-    for path in files:
-
-        date: str = datetime.datetime.fromtimestamp(os.path.getctime(path)).strftime("%B %d, %Y")
-        name: str = path.split('/')[-1]
-
-        works.append({
-            'date' : date,
-            'name' : name,
-            'path' : path
-        })
-
-    return flask.render_template('writing.html', works=works)
-
-
-
-
+    return flask.render_template('programming.html', posts=posts_and_comments, form=form, user=user, status=status)
 
 # About Page
 @app.route('/about/')

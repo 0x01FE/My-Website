@@ -1,0 +1,334 @@
+/* Global Stuff */
+@import url('https://fonts.googleapis.com/css?family=PT%20Mono:700|PT%20Mono:400');
+
+body {
+  font-family: 'PT Mono';
+  font-weight: 400;
+}
+
+h1, h2, h3, h4, h5 {
+  font-family: 'PT Mono';
+  font-weight: 700;
+}
+
+html {
+    --text: hsl(0, 0%, 80%);
+    --background: hsl(228, 44%, 11%);
+    --primary-color: 0, 0%, 35%;
+
+    --primary: hsl(var(--primary-color));
+    --primary10: hsla(var(--primary-color), 10%);
+    --primary20: hsla(var(--primary-color), 20%);
+    --primary40: hsla(var(--primary-color), 40%);
+
+    --secondary-color: 277, 81%, 33%;
+    --secondary: hsl(var(--secondary-color));
+    --secondary10: hsla(var(--secondary-color), 10%);
+    --secondary20: hsla(var(--secondary-color), 20%);
+    --secondary30: hsla(var(--secondary-color), 30%);
+    --secondary40: hsla(var(--secondary-color), 40%);
+    --secondary50: hsla(var(--secondary-color), 50%);
+
+    --accent-color: 51, 35%, 39%;
+    --test: hsl(51, 35%, 39%);
+    --accent: hsl(var(--accent-color));
+    --accent75: hsla(var(--accent-color), 75%);
+    --accent50: hsla(var(--accent-color), 50%);
+
+    --link-color: hsl(0, 0%, 100%);
+    --link-glow: hsl(0, 0%, 100%);
+
+    --main-background: var(--primary10);
+    --border-color: var(--background);
+    --borders-style: solid;
+    --border-radius: 0px;
+    --border-width: 0.5em;
+}
+
+
+body {
+    color: var(--text);
+    background-color: var(--background);
+}
+
+a {
+    color: var(--link-color);
+}
+
+a:hover {
+    text-shadow: 0 0 0.1em var(--link-glow);
+}
+
+blockquote {
+    background-color: var(--secondary10);
+    border-style: var(--borders-style);
+    border-radius: 7.5px;
+    padding: 0.25em;
+}
+
+.post blockquote p {
+    text-indent: 1.5em;
+}
+
+.post blockquote li p {
+    text-indent: 0;
+}
+
+li {
+    margin-left: 4em;
+}
+
+
+/* Other */
+
+.header {
+    text-align: center;
+
+    margin: 0.5em 30%;
+    padding: 2em;
+
+    border-style: var(--borders-style);
+    border-color: var(--border-color);
+    background-color: var(--background);
+    border-radius: var(--border-radius);
+}
+
+.header a {
+    text-decoration: none;
+    color: var(--primary);
+}
+
+.container {
+
+    display: flex;
+    flex-direction: row;
+
+    margin: 0px 5%;
+
+    border-style: var(--borders-style);
+    border-color: var(--border-color);
+    background-color: var(--main-background);
+    border-radius: var(--border-radius);
+}
+
+.sidebar {
+    height: fit-content;
+    align-self: flex-start;
+    position: sticky;
+    top: 10px;
+
+    padding: 20pt;
+
+    margin: 5em 0.5em;
+    margin-left: 2em;
+
+    border-style: var(--borders-style);
+    border-radius: var(--border-radius);
+    border-color: var(--border-color);
+    background-color: var(--main-background);
+
+    opacity: 0.9;
+
+    /* box-shadow: -10px 10px var(--accent); */
+
+    /* Text Settings */
+    font-weight: bold;
+    line-height: 30pt;
+}
+
+.sidebar a {
+    text-decoration: none;
+}
+
+.rightbar {
+    height: fit-content;
+    align-self: flex-start;
+    top: 10px;
+
+    padding: 20pt;
+
+    margin: 5em 0;
+    margin-right: 2em;
+
+    border-style: var(--borders-style);
+    border-radius: var(--border-radius);
+    border-color: var(--border-color);
+    background-color: var(--main-background);
+
+    opacity: 0.9;
+
+    /* box-shadow: -10px 10px var(--accent); */
+
+    /* Text Settings */
+    font-weight: bold;
+    line-height: 30pt;
+}
+
+.rightbar a {
+    text-decoration: none;
+}
+
+.rightbar h2 {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    line-height: normal;
+}
+
+.dlog {
+    flex: 3;
+
+    display: flex;
+    flex-direction: column;
+
+    padding: 10pt;
+    margin: 0.5em 5%;
+    margin-left: 0;
+
+    border-style: var(--borders-style);
+    border-radius: var(--border-radius);
+    border-color: var(--border-color);
+    border-width: var(--border-width);
+}
+
+.post {
+
+    border-style: var(--borders-style);
+    border-radius: var(--border-radius);
+
+    padding: 1.5em 2em;
+    margin: 1em 2em;
+
+    background-color: var(--main-background);
+    /* box-shadow: 10px 10px var(--accent); */
+}
+
+.post img {
+    border-style: inset;
+    border-width: 0.25em;
+    border-radius: var(--border-radius);
+
+    width: 90%;
+
+    padding: 0em;
+    margin: 0.5em 1em;
+
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+
+    background-color: var(--background);
+}
+
+.post h1 {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-weight: 100;
+    font-size: 26px;
+
+    text-decoration: underline;
+    text-decoration-style: solid;
+    text-decoration-thickness: 0.25em;
+    text-underline-offset: 7px;
+    text-decoration-color: var(--primary);
+}
+
+.post h2 {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-weight: 300;
+    font-size: 18px;
+}
+
+.post p {
+    line-height: 2.25;
+    text-indent: 3em;
+}
+
+.post-date {
+    float: right;
+}
+
+.comment-container {
+    /* background-color: var(--primary40); */
+    border-style: var(--borders-style);
+    border-radius: var(--border-radius);
+
+    padding: 1em;
+    margin: 1em;
+}
+
+.comment {
+    background-color: var(--primary40);
+    border-style: var(--borders-style);
+    border-radius: 5px;
+
+    margin: 0.25em;
+    padding: 0.25em;
+}
+
+.comment h4 {
+    margin: 0.25em;
+}
+
+.comment p {
+    margin: 0.25em;
+    text-indent: 1em;
+}
+
+.comment-editor textarea {
+    width: 80%;
+    height: 6em;
+    padding: 0.75em;
+
+    border-style: solid;
+    border-color: var(--border-color);
+    background-color: var(--primary40);
+    color: var(--text);
+}
+
+.comment-editor textarea:focus {
+    border: 3px solid var(--accent);
+}
+
+/* MUSIC */
+.albums {
+    height: fit-content;
+    align-self: flex-start;
+    top: 10px;
+
+    padding: 20pt;
+
+    margin: 5em 0;
+    margin-right: 2em;
+
+    border-style: var(--borders-style);
+    border-radius: var(--border-radius);
+    border-color: var(--border-color);
+    background-color: var(--main-background);
+
+    /* Text Settings
+    font-weight: bold;
+    line-height: 30pt; */
+}
+
+
+.real-albums img {
+    height: 100px;
+    width: 100px;
+    padding: 0 0;
+    margin: 0 0;
+    border: 0 0;
+}
+
+.real-albums {
+    line-height: 0;
+    font-size: 0;
+    padding: 0 0;
+    margin: 0 0;
+}
+
+.albums h1 {
+    font-size: 2em;
+    text-align: center;
+    padding: 0 0;
+    margin: 15pt 0;
+    margin-top: -5pt;
+}
+

@@ -11,6 +11,12 @@ docker-compose.yaml
 # Ignore images in posts
 *.jpg
 *.png
+
+# Flask Data & Config
+*.ini
+data
+.flask_session
+*.json
 *.gif
 
 # Writing
